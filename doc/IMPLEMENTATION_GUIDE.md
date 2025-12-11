@@ -4,6 +4,16 @@
 
 ---
 
+## 🎯 Start Here for Frontend (Fase 2.5)
+
+**Jika ingin mulai frontend development:**
+
+1. **`QUICK_START.md`** ← START HERE! (5 mins read, step-by-step setup)
+2. **`FE_TODO.md`** ← WAJIB DIBACA! (Complete UI breakdown + components + dummy data)
+3. **`FE_IMPLEMENTATION_TRACKER.md`** ← Use as checklist untuk tracking progress
+
+---
+
 ## 📋 Fase Pengembangan
 
 1. [Fase 1: Project Setup](#fase-1-project-setup) - ✅ **COMPLETE**
@@ -24,7 +34,7 @@
 
 ### Status: ✅ COMPLETE (11 Desember 2025)
 
-Lihat detail implementasi di `PHASE_1_2_COMPLETE.md`
+Lihat detail implementasi di `doc/PHASE_1_2_COMPLETE.md`
 
 ### 1.1 Initialize Next.js Project
 
@@ -211,7 +221,7 @@ export default config;
 
 ### Status: ✅ COMPLETE (11 Desember 2025)
 
-Lihat detail implementasi di `PHASE_1_2_COMPLETE.md`
+Lihat detail implementasi di `doc/PHASE_1_2_COMPLETE.md`
 
 **Database**: PostgreSQL database `lelang_db` created & verified
 **Schema**: 13 models dengan 360+ lines of schema code
@@ -286,6 +296,13 @@ if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 ### Status: ⏳ PENDING (Ready to Start)
 
 Frontend slicing & reusable component library setup sebelum authentication implementation.
+
+**📌 Lihat dokumentasi lengkap:**
+- **`doc/PHASE_2_5_FRONTEND.md`** - Overview & phase breakdown (14-hour timeline)
+- **`doc/FE_TODO.md`** - RECOMMENDED: Complete UI breakdown + component architecture + dummy data setup (BACA INI DULU!)
+- **`doc/FE_IMPLEMENTATION_TRACKER.md`** - Detailed checklist untuk tracking progress
+
+**⭐ Key Feature:** Sidebar akan di-implement di root layout agar tidak rerender saat pindah halaman!
 
 ### 2.5.1 Setup UI Component Library (shadcn/ui)
 

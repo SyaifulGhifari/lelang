@@ -8,14 +8,15 @@
 
 1. [Fase 1: Project Setup](#fase-1-project-setup) - ✅ **COMPLETE**
 2. [Fase 2: Database & Prisma Setup](#fase-2-database--prisma-setup) - ✅ **COMPLETE**
-3. [Fase 3: Authentication System](#fase-3-authentication-system)
-4. [Fase 4: Auction CRUD](#fase-4-auction-crud)
-5. [Fase 5: Bidding System](#fase-5-bidding-system)
-6. [Fase 6: Payment Integration](#fase-6-payment-integration)
-7. [Fase 7: Notifications](#fase-7-notifications)
-8. [Fase 8: Admin Panel](#fase-8-admin-panel)
-9. [Fase 9: Testing & Optimization](#fase-9-testing--optimization)
-10. [Fase 10: Deployment](#fase-10-deployment)
+3. [Fase 2.5: Frontend UI & Component Setup](#fase-25-frontend-ui--component-setup) - Frontend Slicing
+4. [Fase 3: Authentication System](#fase-3-authentication-system)
+5. [Fase 4: Auction CRUD](#fase-4-auction-crud)
+6. [Fase 5: Bidding System](#fase-5-bidding-system)
+7. [Fase 6: Payment Integration](#fase-6-payment-integration)
+8. [Fase 7: Notifications](#fase-7-notifications)
+9. [Fase 8: Admin Panel](#fase-8-admin-panel)
+10. [Fase 9: Testing & Optimization](#fase-9-testing--optimization)
+11. [Fase 10: Deployment](#fase-10-deployment)
 
 ---
 
@@ -276,6 +277,245 @@ export const prisma =
   });
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+```
+
+---
+
+## Fase 2.5: Frontend UI & Component Setup
+
+### Status: ⏳ PENDING (Ready to Start)
+
+Frontend slicing & reusable component library setup sebelum authentication implementation.
+
+### 2.5.1 Setup UI Component Library (shadcn/ui)
+
+```bash
+# Install shadcn/ui CLI
+npx shadcn-ui@latest init
+
+# Install commonly used components
+npx shadcn-ui@latest add button
+npx shadcn-ui@latest add input
+npx shadcn-ui@latest add card
+npx shadcn-ui@latest add form
+npx shadcn-ui@latest add dialog
+npx shadcn-ui@latest add dropdown-menu
+npx shadcn-ui@latest add select
+npx shadcn-ui@latest add pagination
+npx shadcn-ui@latest add toast
+npx shadcn-ui@latest add avatar
+npx shadcn-ui@latest add badge
+npx shadcn-ui@latest add modal
+npx shadcn-ui@latest add tabs
+npx shadcn-ui@latest add alert
+```
+
+### 2.5.2 Create Layout Components
+
+**File: `src/components/layout/Header.tsx`**
+- Navbar dengan logo
+- Navigation menu
+- User profile dropdown
+- Search bar
+- Mobile hamburger menu
+
+**File: `src/components/layout/Footer.tsx`**
+- Footer dengan links
+- Social media icons
+- Copyright info
+
+**File: `src/components/layout/Sidebar.tsx`**
+- Admin sidebar navigation
+- Collapsible menu
+- Active route indicator
+
+### 2.5.3 Create Shared Components
+
+**Directory: `src/components/shared/`**
+
+- **SearchBar.tsx** - Search auctions
+- **Pagination.tsx** - Pagination component
+- **LoadingSkeleton.tsx** - Loading placeholder
+- **EmptyState.tsx** - Empty state UI
+- **ErrorBoundary.tsx** - Error boundary wrapper
+- **Modal.tsx** - Reusable modal
+- **Toast.tsx** - Toast notifications
+- **Badge.tsx** - Status badges
+- **Avatar.tsx** - User avatar
+- **Button.tsx** - Custom button variants
+
+### 2.5.4 Create Form Components
+
+**Directory: `src/components/forms/`**
+
+- **LoginForm.tsx** - Login form dengan validation
+- **RegisterForm.tsx** - Registration form
+- **AuctionForm.tsx** - Create/edit auction form
+- **SearchFilters.tsx** - Advanced search filters
+- **BidForm.tsx** - Place bid form
+
+### 2.5.5 Create Page Layouts
+
+**Directory: `src/app/`**
+
+```
+src/app/
+├── (auth)/
+│   ├── layout.tsx
+│   ├── login/
+│   │   └── page.tsx
+│   ├── register/
+│   │   └── page.tsx
+│   └── forgot-password/
+│       └── page.tsx
+│
+├── (main)/
+│   ├── layout.tsx
+│   ├── page.tsx (Home)
+│   ├── auctions/
+│   │   ├── page.tsx
+│   │   └── [id]/
+│   │       └── page.tsx
+│   ├── categories/
+│   │   ├── page.tsx
+│   │   └── [slug]/
+│   │       └── page.tsx
+│   └── dashboard/
+│       ├── page.tsx
+│       ├── my-bids/
+│       │   └── page.tsx
+│       ├── my-wins/
+│       │   └── page.tsx
+│       └── settings/
+│           └── page.tsx
+│
+├── admin/
+│   ├── layout.tsx
+│   ├── page.tsx (Dashboard)
+│   ├── auctions/
+│   │   ├── page.tsx
+│   │   ├── create/
+│   │   │   └── page.tsx
+│   │   └── [id]/
+│   │       └── page.tsx
+│   ├── users/
+│   │   ├── page.tsx
+│   │   └── [id]/
+│   │       └── page.tsx
+│   ├── categories/
+│   │   ├── page.tsx
+│   │   └── [id]/
+│   │       └── page.tsx
+│   └── transactions/
+│       └── page.tsx
+│
+├── layout.tsx (Root layout)
+├── page.tsx (Home page)
+├── not-found.tsx
+└── globals.css
+```
+
+### 2.5.6 Create Auction Components
+
+**Directory: `src/components/auction/`**
+
+- **AuctionCard.tsx** - Auction card dengan info dasar
+- **AuctionGrid.tsx** - Grid layout untuk auctions
+- **AuctionDetail.tsx** - Full auction detail page
+- **AuctionGallery.tsx** - Image gallery dengan thumbnail
+- **CountdownTimer.tsx** - Live countdown timer
+- **BidHistory.tsx** - Bid history table
+- **BidForm.tsx** - Bid placement form
+
+### 2.5.7 Create Dashboard Components
+
+**Directory: `src/components/dashboard/`**
+
+- **StatsCard.tsx** - Statistics card widget
+- **RecentActivity.tsx** - Recent activity list
+- **UserStats.tsx** - User statistics
+- **WonAuctions.tsx** - Won auctions list
+- **BidHistory.tsx** - User bid history
+
+### 2.5.8 Setup Global Styles
+
+**File: `src/app/globals.css`**
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom colors */
+:root {
+  --primary: #007AFF;
+  --secondary: #5AC8FA;
+  --danger: #FF3B30;
+  --success: #34C759;
+  --warning: #FF9500;
+}
+
+/* Custom components */
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors;
+  }
+  
+  .btn-secondary {
+    @apply px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors;
+  }
+  
+  .card {
+    @apply bg-white rounded-lg shadow-md p-6;
+  }
+  
+  .input-field {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500;
+  }
+}
+```
+
+### 2.5.9 Create Responsive Layout
+
+Pastikan semua components responsive untuk:
+- Mobile (320px - 767px)
+- Tablet (768px - 1023px)
+- Desktop (1024px - 1439px)
+- Large Desktop (1440px+)
+
+### 2.5.10 Create Type Definitions
+
+**File: `src/types/index.ts`**
+```typescript
+export type UserRole = 'USER' | 'ADMIN' | 'SUPER_ADMIN';
+export type AuctionStatus = 'DRAFT' | 'ACTIVE' | 'ENDED' | 'SOLD' | 'CANCELLED';
+export type BidStatus = 'ACTIVE' | 'OUTBID' | 'WON' | 'CANCELLED';
+export type PaymentStatus = 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
+
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  avatar?: string;
+  role: UserRole;
+}
+
+export interface Auction {
+  id: string;
+  title: string;
+  description: string;
+  currentPrice: number;
+  startingPrice: number;
+  images: string[];
+  endTime: Date;
+  status: AuctionStatus;
+}
+
+export interface Bid {
+  id: string;
+  amount: number;
+  status: BidStatus;
+  createdAt: Date;
+}
 ```
 
 ---

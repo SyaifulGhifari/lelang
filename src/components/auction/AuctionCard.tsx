@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { Badge } from '@/components/shared/Badge';
-import { Avatar } from '@/components/shared/Avatar';
 import type { Auction } from '@/types';
 
 interface AuctionCardProps {

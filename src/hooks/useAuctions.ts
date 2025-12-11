@@ -22,8 +22,6 @@ interface UseAuctionsReturn {
 
 export function useAuctions(initialFilters?: AuctionFilters): UseAuctionsReturn {
   const [filters, setFilters] = useState<AuctionFilters>(initialFilters || {});
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const getFilteredAuctions = (): Auction[] => {
     let result = [...DUMMY_AUCTIONS];
@@ -81,8 +79,8 @@ export function useAuctions(initialFilters?: AuctionFilters): UseAuctionsReturn 
 
   return {
     auctions,
-    isLoading,
-    error,
+    isLoading: false,
+    error: null,
     filters,
     setFilters,
     totalCount: auctions.length,

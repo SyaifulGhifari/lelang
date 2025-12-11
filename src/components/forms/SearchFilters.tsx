@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { searchFiltersSchema, type SearchFiltersData } from './validators';
+import { type SearchFiltersData } from './validators';
 import { DUMMY_CATEGORIES } from '@/lib/constants/dummyData';
 
 interface SearchFiltersProps {

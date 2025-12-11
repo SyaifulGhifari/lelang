@@ -1,67 +1,65 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+'use client';
+
+import { StatsCard, UserProfileCard, RecentActivity, WonAuctions, MyBidsTable } from '@/components/dashboard';
+import { DUMMY_AUCTIONS, DUMMY_BIDS, DUMMY_USERS } from '@/lib/constants/dummyData';
 
 export default function Dashboard() {
+  const currentUser = DUMMY_USERS[0];
+  const userBids = DUMMY_BIDS.slice(0, 5);
+  const wonAuctions = DUMMY_AUCTIONS.filter(a => a.status === 'SOLD').slice(0, 3);
+  
+  // Create activities from bids and auctions
+  const activities = [
+    { id: '1', type: 'bid' as const, title: 'Rolex Watch', description: 'Placed a bid on Rolex Watch', timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000), icon: '🔨' },
+    { id: '2', type: 'won' as const, title: 'iPhone 15 Pro Max', description: 'Won iPhone 15 Pro Max', timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000), icon: '🏆' },
+    { id: '3', type: 'listed' as const, title: 'Vintage Leather Jacket', description: 'Listed Vintage Leather Jacket', timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), icon: '📦' },
+  ];
+
+  // Create auction map for MyBidsTable
+  const auctionMap = new Map(DUMMY_AUCTIONS.map(a => [a.id, a]));
+
+  const stats = [
+    { icon: '🔨', label: 'Active Bids', value: '5', change: { value: 2, isPositive: true } },
+    { icon: '🏆', label: 'Won Auctions', value: '12', change: { value: 1, isPositive: true } },
+    { icon: '📦', label: 'Items Listed', value: '3', change: { value: 0, isPositive: false } },
+    { icon: '💰', label: 'Account Balance', value: 'Rp 2.5M', change: { value: 25, isPositive: true } },
+  ];
+
   return (
-    <div className="space-y-8 p-8">
+    <div className="space-y-6 p-6 lg:p-8">
+      {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
         <p className="text-gray-600">Welcome back! Here's your auction activity overview.</p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {[
-          { label: 'Active Bids', value: '5', icon: '🔨' },
-          { label: 'Won Auctions', value: '12', icon: '🏆' },
-          { label: 'Items Listed', value: '3', icon: '📦' },
-          { label: 'Account Balance', value: 'Rp 2.5M', icon: '💰' },
-        ].map((stat) => (
-          <Card key={stat.label}>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">
-                {stat.label}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
-              <p className="text-xs text-gray-500 mt-1">{stat.icon}</p>
-            </CardContent>
-          </Card>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {stats.map((stat) => (
+          <StatsCard key={stat.label} {...stat} />
         ))}
       </div>
 
-      {/* Recent Activity */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
-          <CardDescription>Your latest auction activities</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between border-b pb-4">
-              <div>
-                <p className="font-medium text-gray-900">Placed a bid on Rolex Watch</p>
-                <p className="text-sm text-gray-600">Bid amount: Rp 7,500,000</p>
-              </div>
-              <span className="text-xs text-gray-500">2 hours ago</span>
-            </div>
-            <div className="flex items-center justify-between border-b pb-4">
-              <div>
-                <p className="font-medium text-gray-900">Won iPhone 15 Pro Max</p>
-                <p className="text-sm text-gray-600">Final bid: Rp 13,500,000</p>
-              </div>
-              <span className="text-xs text-gray-500">1 day ago</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium text-gray-900">Listed Vintage Leather Jacket</p>
-                <p className="text-sm text-gray-600">Starting price: Rp 500,000</p>
-              </div>
-              <span className="text-xs text-gray-500">3 days ago</span>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        {/* Left Column */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Recent Activity */}
+          <RecentActivity activities={activities} />
+
+          {/* My Active Bids */}
+          <MyBidsTable bids={userBids} auctions={auctionMap} />
+
+          {/* Won Auctions */}
+          <WonAuctions auctions={wonAuctions} />
+        </div>
+
+        {/* Right Column */}
+        <div>
+          {/* User Profile Card */}
+          <UserProfileCard user={currentUser} />
+        </div>
+      </div>
     </div>
   );
 }

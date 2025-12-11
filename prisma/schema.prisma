@@ -17,15 +17,22 @@ datasource db {
 model User {
   id                String   @id @default(cuid())
   email             String   @unique
-  phone             String   @unique
+  phone             String?
   name              String
+  username          String?   @unique
   avatar            String?
   password          String?
-  role              Role     @default(USER)
+  address           String?
+  city              String?
+  province          String?
+  postalCode        String?
+  role              UserRole @default(USER)
   status            UserStatus @default(ACTIVE)
   phoneVerified     Boolean  @default(false)
+  emailVerified     DateTime?
   otpCode           String?
   otpExpiredAt      DateTime?
+  lastLoginAt       DateTime?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
@@ -33,25 +40,30 @@ model User {
   bids              Bid[]
   auctions          Auction[]
   transactions      Transaction[]
-  reviews           Review[]
+  reviews           Review[]        @relation("ReviewAuthor")
+  receivedReviews   Review[]        @relation("ReviewTarget")
   watchlist         Watchlist[]
   notifications     Notification[]
   wonAuctions       Auction[] @relation("WonAuctions")
+  accounts          Account[]
+  sessions          Session[]
 
   @@index([email])
   @@index([phone])
   @@index([role])
+  @@map("users")
 }
 
-enum Role {
-  ADMIN
+enum UserRole {
   USER
+  ADMIN
+  SUPER_ADMIN
 }
 
 enum UserStatus {
   ACTIVE
   SUSPENDED
-  DELETED
+  BANNED
 }
 
 // ============================================
@@ -79,20 +91,20 @@ model Auction {
   title           String
   slug            String   @unique
   description     String   @db.Text
-  condition       String   // Baru, Bekas, Refurbished
-  startingPrice   Float
-  reservePrice    Float?
-  buyNowPrice     Float?
-  currentPrice    Float
-  bidIncrement    Float    @default(10000)
+  condition       String   // NEW, LIKE_NEW, GOOD, FAIR
+  startingPrice   Decimal       @db.Decimal(15, 2)
+  reservePrice    Decimal?      @db.Decimal(15, 2)
+  buyNowPrice     Decimal?      @db.Decimal(15, 2)
+  currentPrice    Decimal       @db.Decimal(15, 2)
+  bidIncrement    Decimal       @default(10000) @db.Decimal(15, 2)
   startTime       DateTime
   endTime         DateTime
-  status          AuctionStatus @default(ACTIVE)
+  status          AuctionStatus @default(DRAFT)
   isHighlighted   Boolean  @default(false)
   isFeatured      Boolean  @default(false)
   viewCount       Int      @default(0)
-  weight          Float?
-  shippingCost    Float?
+  weight          Decimal?      @db.Decimal(10, 2)
+  shippingCost    Decimal?      @db.Decimal(15, 2)
   shippingInfo    String?
   location        String?
   createdAt       DateTime @default(now())
@@ -114,7 +126,7 @@ model Auction {
   @@index([sellerId])
   @@index([categoryId])
   @@index([winnerId])
-  @@index([status])
+  @@index([status, endTime])
   @@index([slug])
   @@map("auctions")
 }
@@ -136,6 +148,7 @@ model AuctionImage {
 
 enum AuctionStatus {
   DRAFT
+  PENDING_APPROVAL
   ACTIVE
   ENDED
   SOLD
@@ -148,9 +161,9 @@ enum AuctionStatus {
 
 model Bid {
   id        String   @id @default(cuid())
-  amount    Float
+  amount    Decimal       @db.Decimal(15, 2)
   isAutoBid Boolean  @default(false)
-  maxBid    Float?
+  maxBid    Decimal?      @db.Decimal(15, 2)
   status    BidStatus @default(ACTIVE)
   createdAt DateTime @default(now())
 
@@ -160,9 +173,10 @@ model Bid {
   bidderId  String
   bidder    User     @relation(fields: [bidderId], references: [id], onDelete: Cascade)
 
-  @@index([auctionId])
+  @@index([auctionId, amount])
   @@index([bidderId])
   @@index([status])
+  @@map("bids")
 }
 
 enum BidStatus {
@@ -179,10 +193,14 @@ enum BidStatus {
 model Transaction {
   id            String   @id @default(cuid())
   type          TransactionType
-  amount        Float
-  status        TransactionStatus @default(PENDING)
+  amount        Decimal       @db.Decimal(15, 2)
+  fee           Decimal       @default(0) @db.Decimal(15, 2)
+  status        PaymentStatus @default(PENDING)
+  paymentMethod String?
   paymentId     String?  @unique
   paymentUrl    String?
+  paymentData   Json?
+  notes         String?
   paidAt        DateTime?
   expiredAt     DateTime?
   createdAt     DateTime @default(now())
@@ -198,6 +216,7 @@ model Transaction {
   @@index([auctionId])
   @@index([status])
   @@index([paymentId])
+  @@map("transactions")
 }
 
 enum TransactionType {
@@ -206,11 +225,11 @@ enum TransactionType {
   COMMISSION
 }
 
-enum TransactionStatus {
+enum PaymentStatus {
   PENDING
   PAID
   FAILED
-  CANCELLED
+  REFUNDED
   EXPIRED
 }
 
@@ -226,13 +245,18 @@ model Review {
   updatedAt DateTime @updatedAt
 
   // Relations
-  auctionId String
-  auction   Auction  @relation(fields: [auctionId], references: [id], onDelete: Cascade)
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  auctionId String?
+  auction   Auction? @relation(fields: [auctionId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation("ReviewAuthor", fields: [authorId], references: [id])
+  targetId  String
+  target    User     @relation("ReviewTarget", fields: [targetId], references: [id])
 
+  @@unique([authorId, targetId, auctionId])
   @@index([auctionId])
-  @@index([userId])
+  @@index([authorId])
+  @@index([targetId])
+  @@map("reviews")
 }
 
 // ============================================
@@ -303,8 +327,11 @@ model Account {
   id_token           String? @db.Text
   session_state      String?
 
+  user               User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@unique([provider, providerAccountId])
   @@index([userId])
+  @@map("accounts")
 }
 
 model Session {
@@ -315,7 +342,10 @@ model Session {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
+  user         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([userId])
+  @@map("sessions")
 }
 
 model VerificationToken {
@@ -324,6 +354,7 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+  @@map("verification_tokens")
 }
 
 model Setting {
@@ -332,4 +363,6 @@ model Setting {
   value     String   @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("settings")
 }

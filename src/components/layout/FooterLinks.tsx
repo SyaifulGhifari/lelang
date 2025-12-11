@@ -48,8 +48,8 @@ export default function FooterLinks() {
           <div key={section.title}>
             <h3 className="mb-4 font-semibold text-gray-900">{section.title}</h3>
             <ul className="space-y-2">
-              {section.links.map((link) => (
-                <li key={link.href}>
+              {section.links.map((link, index) => (
+                <li key={`${link.href}-${index}`}>
                   <Link
                     href={link.href}
                     className="text-sm text-gray-600 hover:text-gray-900"

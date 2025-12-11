@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🔥 Lelang Online - Auction Platform
 
-## Getting Started
+Production-grade Next.js full-stack auction platform built with modern technologies.
 
-First, run the development server:
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+ & npm/yarn
+- PostgreSQL 13+ (local or cloud)
+- Git
+
+### Installation
 
 ```bash
+# Clone repository
+git clone <repo-url>
+cd lelang
+
+# Install dependencies
+npm install
+
+# Setup environment variables
+cp .env.example .env.local
+# Edit .env.local with your credentials
+
+# Generate Prisma Client
+npx prisma generate
+
+# Create and run database migration
+npx prisma migrate dev --name init
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📂 Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/                 # Next.js App Router (pages & API)
+├── components/          # Reusable React components
+├── lib/                 # Core logic & utilities
+│   ├── auth/           # Authentication logic
+│   ├── db/             # Database client
+│   ├── validators/     # Zod schemas
+│   ├── services/       # Business logic
+│   └── constants/      # App constants
+├── hooks/              # Custom React hooks
+├── middleware/         # Next.js middleware
+├── services/           # External services
+├── store/              # Zustand state management
+└── types/              # TypeScript types
 
-## Learn More
+prisma/
+└── schema.prisma       # Database schema
 
-To learn more about Next.js, take a look at the following resources:
+public/                 # Static assets
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠️ Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Next.js 16** - React framework with App Router
+- **React 19** - UI library
+- **TypeScript 5** - Type safety
+- **Tailwind CSS 4** - Styling
+- **Prisma 5** - ORM
+- **PostgreSQL** - Database
+- **NextAuth 4** - Authentication
+- **Midtrans** - Payment gateway
+- **Fonnte** - WhatsApp OTP
 
-## Deploy on Vercel
+## 📜 Available Scripts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run dev              # Start dev server
+npm run build           # Build for production
+npm run lint            # Run ESLint
+npm run format          # Format code with Prettier
+npx prisma migrate     # Run database migrations
+npx prisma studio     # Open Prisma Studio GUI
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📚 Documentation
+
+- [Phase 1 Complete ✅](./PHASE_1_COMPLETE.md) - Project setup
+- [PRD Document](./PRD-Lelang-Website.md) - Product requirements
+- [Implementation Guide](./IMPLEMENTATION_GUIDE.md) - Development phases
+
+---
+
+**Last Updated:** December 11, 2025
+

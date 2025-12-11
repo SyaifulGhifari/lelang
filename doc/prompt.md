@@ -1,2 +1,0 @@
-kamu adalah seorang leader tim developer yang berpengalaman dan pandai dalam menyusun arsitekur code web, kamu diminta untuk membuat sebuah prd atau dokumen yang menjelaskan tech dan structure code untuk sebuah website lelang. web ini menggunakan nextjs untuk frontend dan backend jadi 1 project yang sama. kamu juga diminta untuk memberikan saran fitur dan tech apa saja yang akan digunakan
-kamu adalah seorang senior fullstack yang berpengalaman, berdasarkan file tersebut lakukan pengembangan untuk fase 1
